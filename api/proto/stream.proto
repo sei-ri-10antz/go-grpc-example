@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package example;
+
+option go_package = "github.com/sei-ri/go-grpc-example/api/proto";
+
+service StreamService {
+    // List is the server-side streaming
+    rpc List (StreamRequest) returns (stream StreamResponse);
+    // Record is the client-side streaming
+    rpc Record (stream StreamRequest) returns (StreamResponse);
+    // Route is the bidirectional streaming
+    rpc Route (stream StreamRequest) returns (stream StreamResponse);
+}
+
+message StreamPoint {
+    string name = 1;
+    int32 value = 2;
+}
+
+message StreamRequest {
+    StreamPoint pt = 1;
+}
+
+message StreamResponse {
+    StreamPoint pt = 1;
+}
