@@ -43,6 +43,30 @@ func main() {
 		},
 	})
 
+	err = callGet(client, &proto.StreamRequest{
+		Pt: &proto.StreamPoint{
+			Name:  "gRPC Unary Client: simple",
+			Value: 2020,
+		},
+	})
+
+	err = callGet(client, &proto.StreamRequest{
+		Pt: &proto.StreamPoint{
+			Name:  "gRPC Unary Client: simple",
+			Value: -1,
+		},
+	})
+}
+
+func callGet(client proto.StreamServiceClient, msg *proto.StreamRequest) error {
+	resp, err := client.Get(context.Background(), msg)
+	if err != nil {
+		return err
+	}
+
+	log.Printf("[response] name: %s, value: %d", resp.Pt.Name, resp.Pt.Value)
+
+	return nil
 }
 
 func callLists(client proto.StreamServiceClient, msg *proto.StreamRequest) error {

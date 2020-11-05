@@ -5,6 +5,7 @@ import (
 	"log"
 	"net"
 
+	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"github.com/sei-ri/go-grpc-example/api/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -24,7 +25,13 @@ func (s *Server) Serve(ctx context.Context) error {
 
 	log.Println("gRPC listening at ", lis.Addr())
 
-	srv := grpc.NewServer()
+	opts := []grpc.ServerOption{
+		grpc_middleware.WithUnaryServerChain(
+			Interceptor.Logging(),
+			Interceptor.Recovery(),
+		),
+	}
+	srv := grpc.NewServer(opts...)
 
 	proto.RegisterStreamServiceServer(srv, &StreamServiceServer{})
 	reflection.Register(srv)

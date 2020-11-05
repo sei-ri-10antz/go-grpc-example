@@ -5,6 +5,8 @@ package example;
 option go_package = "github.com/sei-ri/go-grpc-example/api/proto";
 
 service StreamService {
+    // Get is the simple rpc
+    rpc Get (StreamRequest) returns (StreamResponse);
     // List is the server-side streaming
     rpc List (StreamRequest) returns (stream StreamResponse);
     // Record is the client-side streaming
