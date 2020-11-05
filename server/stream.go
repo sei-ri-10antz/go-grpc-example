@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"io"
 	"log"
 
@@ -8,6 +9,15 @@ import (
 )
 
 type StreamServiceServer struct{}
+
+func (s *StreamServiceServer) Get(ctx context.Context, req *proto.StreamRequest) (*proto.StreamResponse, error) {
+	if req.Pt.Value < 0 {
+		panic("raise manual panic")
+	}
+	return &proto.StreamResponse{
+		Pt: req.Pt,
+	}, nil
+}
 
 func (s *StreamServiceServer) List(request *proto.StreamRequest, stream proto.StreamService_ListServer) error {
 	for n := 0; n < 10; n++ {
